@@ -1,0 +1,6 @@
+{% extends 'base.html' %}
+{% from "book/form.html" import form %}
+
+{% block content %}
+{{form(genres, 'new', url_for('book.new_book'), book_genres, book_info)}}
+{% endblock %}

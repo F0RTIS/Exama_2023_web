@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% from "pagination_review.html" import pagination %}
+
+{% block content %}
+    <div class="d-flex flex-column align-items-center">
+        <label class="m-5 pd-5 width-50 text-center">Фильтр по статусу</label>
+        <form class="d-flex flex-row align-items-center" method="POST" action="{{ url_for('review.review_moder') }}">
+            <select class="form-select m-5 pd-5 w-50 justify-content-center" name="statues">
+            
+                <option value="0" {% if statues == 0 %}selected{% endif %}>Все</option>
+                <option value="1" {% if statues == 1 %}selected{% endif %}>На рассмотрении</option>
+                <option value="2" {% if statues == 2 %}selected{% endif %}>Одобрено</option>
+                <option value="3" {% if statues == 3 %}selected{% endif %}>Отклонено</option>
+            </select>
+            <button type="submit" class="btn btn-success btn-block h-50">Применить</button>
+        </form>
+        <label class="text-center">Всего рецензий {{ count_review }}</label>
+        <div class="container ">
+            <div class="border border-success rounded bg-white m-5 pd-5">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                №
+                            </th>
+                            <th>
+                                Книга
+                            </th>
+                            <th>
+                                Автор
+                            </th>
+                            <th>
+                                Дата создания
+                            </th>
+                            <th>
+                                Статус
+                            </th>
+                            <th>
+                                Действия
+                            </th>
+                        </tr>        
+                    </thead>
+                    <tbody>
+                        {% for review in review_list %}
+                        <tr>    
+                            <td>
+                                {{ loop.index }}
+                            </td>
+                            <td>
+                                {{ review.book_name }}
+                            </td>
+                            <td>
+                                {{review.user_name }}
+                            </td>
+                            <td>
+                                {{ review.created_at }}
+                            </td>  
+                            <td>
+                                {{ review.statuses_name }}
+                            </td>   
+                            <td> 
+                                
+                                <div class="btn-group" role="group">
+                                    <a class="btn btn-success" href="{{ url_for('review.show_review', review_id = review.id) }}">Рассмотреть</a>
+                                </div>
+                            </td>    
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {{pagination(page, page_count, request.endpoint, statues)}}
+        </div>
+    </div>
+{%endblock%}
